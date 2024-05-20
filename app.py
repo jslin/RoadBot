@@ -12,13 +12,13 @@ line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 llm_server_url = os.environ['REMOTE_LLM_SERVER']
 
-def llm_responser(url=llm_server_url, prompt):
+def llm_responser(url=llm_server_url, prompt_text=""):
     headers = {
     "Content-Type": "application/json"
     }
     data = {
         "model": "gemma:7b",
-        "prompt": prompt,
+        "prompt": prompt_text,
     #    "format": "json",
         "options": {
             "seed": 42,
