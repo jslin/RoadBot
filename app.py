@@ -1,5 +1,6 @@
 from flask import Flask, request, abort
 from linebot import LineBotApi
+from linebot.v3.messaging import MessagingApi
 from linebot import WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import *
@@ -9,7 +10,8 @@ import json
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
+#line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
+line_bot_api = MessagingApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 llm_server_url = os.environ['REMOTE_LLM_SERVER']
 
