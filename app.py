@@ -73,7 +73,7 @@ def callback():
 #    message = TextSendMessage(text=llm_text)
 #    line_bot_api.reply_message(event.reply_token, message)
 
-@handler.add(MessageEvent, message=TextMessageContent)
+@handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     prompt = event.message.text
     llm_text = llm_responser(llm_server_url, prompt)
