@@ -66,27 +66,26 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessage)
+#@handler.add(MessageEvent, message=TextMessage)
+#def handle_message(event):
+#    prompt = event.message.text
+#    llm_text = llm_responser(llm_server_url, prompt)
+#    message = TextSendMessage(text=llm_text)
+#    line_bot_api.reply_message(event.reply_token, message)
+
+@handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
     prompt = event.message.text
     llm_text = llm_responser(llm_server_url, prompt)
-    message = TextSendMessage(text=llm_text)
-    line_bot_api.reply_message(event.reply_token, message)
+    with ApiClient(configuration) as api_client: 
+        line_bot_api = MessagingApi(api_client)
+        line_bot_api.reply_message_with_http_info(
+            ReplyMessageRequest(
+                reply_token=event.reply_token,
+                messages=[TextMessageContent(text=event.message.text)]
+            )
+        )
 
-#@handler.add(MessageEvent, message=TextMessageContent)
-#def handle_message(event):
-#    with ApiClient(configuration) as api_client:
-#        prompt = event.message.text
-#        llm_text = llm_responser(llm_server_url, prompt)
-#        line_bot_api = MessagingApi(api_client)
-#        line_bot_api.reply_message_with_http_info(
-#            ReplyMessageRequest(
-#                reply_token=event.reply_token,
-#                messages=[TextMessageContent(text=llm_text)]
-#            )
-#        )
-
-import os
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port)
