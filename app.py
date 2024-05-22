@@ -79,6 +79,7 @@ def handle_message(event):
 #    llm_text = llm_responser(llm_server_url, prompt)
     with ApiClient(configuration) as api_client: 
         line_bot_api = MessagingApi(api_client)
+        print(event.message.text)
         line_bot_api.reply_message_with_http_info(
             ReplyMessageRequest(
                 reply_token=event.reply_token,
