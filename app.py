@@ -1,7 +1,9 @@
 from flask import Flask, request, abort
 from linebot import LineBotApi
-from linebot.webhook import WebhookHandler
-#from linebot.v3.webhook import WebhookHandler
+#from linebot.webhook import WebhookHandler
+from linebot.v3.webhook import WebhookHandler
+#from linebot.v3.messaging import ShowLoadingAnimationRequest
+from linebot.v3.messaging.models.show_loading_animation_request import ShowLoadingAnimationRequest
 from linebot.v3.exceptions import InvalidSignatureError
 from linebot.v3.messaging import (
     Configuration,
@@ -26,6 +28,9 @@ configuration = Configuration(access_token=os.environ['CHANNEL_ACCESS_TOKEN'])
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 llm_server_url = os.environ['REMOTE_LLM_SERVER']
+async_api_client = AsyncApiClient(configuration)
+line_bot_api = AsyncMessagingApi(async_api_client)
+
 
 def llm_responser(url=llm_server_url, prompt_text=""):
     headers = {
@@ -67,13 +72,14 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    prompt = event.message.text
-    llm_text = llm_responser(llm_server_url, prompt)
-    message = TextSendMessage(text=llm_text)
-    line_bot_api.reply_message(event.reply_token, message)
+#@handler.add(MessageEvent, message=TextMessage)
+#def handle_message(event):
+#    prompt = event.message.text
+#    llm_text = llm_responser(llm_server_url, prompt)
+#    message = TextSendMessage(text=llm_text)
+#    line_bot_api.reply_message(event.reply_token, message)
 
+# 以下程式碼是要給 Render.com 用來自動觸發測試 Webhook，以便持續動作不停機。
 @app.route("/healthz", methods=['GET'])
 def healthz():
     app.logger.info("Health trigger")
@@ -92,6 +98,25 @@ def healthz():
 #                messages=[TextMessage(text=event.message.text)]
 #            )
 #        )
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    with ApiClient(configuration) as api_client:
+        # Create an instance of the API class
+        line_bot_api = MessagingApi(api_client)
+        show_loading_animation_request = ShowLoadingAnimationRequest() # ShowLoadingAnimationRequest | 
+        try:
+            api_response = line_bot_api.show_loading_animation(show_loading_animation_request)
+            print("The response of MessagingApi->show_loading_animation:\n")
+            pprint(api_response)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=event.message.text)]
+                )
+            )
+        except Exception as e:
+            print("Exception when calling MessagingApi->show_loading_animation: %s\n" % e)
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 10000))
