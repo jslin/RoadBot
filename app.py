@@ -74,6 +74,11 @@ def handle_message(event):
     message = TextSendMessage(text=llm_text)
     line_bot_api.reply_message(event.reply_token, message)
 
+@app.route("/healthz", methods=['GET'])
+def healthz():
+    app.logger.info("Health trigger")
+    return 'OK'
+
 #@handler.add(MessageEvent, message=TextMessage)
 #def handle_message(event):
 #    prompt = event.message.text
