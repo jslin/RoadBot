@@ -76,7 +76,7 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    show_loading_animation(event.source.user_id, 5)
+    response = show_loading_animation(event.source.user_id, 5)
     prompt = event.message.text
     llm_text = llm_responser(llm_server_url, prompt)
     with ApiClient(configuration) as api_client:
@@ -87,6 +87,7 @@ def handle_message(event):
         message = TextSendMessage(text=llm_text)
         line_bot_api.reply_message(event.reply_token, message)
 #        api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
+    return response
 
 # 以下程式碼是要給 Render.com 用來自動觸發測試 Webhook，以便持續動作不停機。
 @app.route("/healthz", methods=['GET'])
