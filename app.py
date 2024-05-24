@@ -67,8 +67,8 @@ def handle_message(event):
             ShowLoadingAnimationRequest(chatId=event.source.user_id, 
                                         loadingSeconds=5)) # ShowLoadingAnimationRequest
         prompt = event.message.text
-        llm_text = llm_responser(llm_server_url, prompt)
-        message = TextSendMessage(text=llm_text)
+        llm_text = llm_responser(llm_server_url, prompt) # 呼叫大模型
+        message = TextSendMessage(text=llm_text) # 將大模型的回應轉成 LINE 訊息格式
 #        line_bot_api.reply_message(event.reply_token, message)
         api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
 
