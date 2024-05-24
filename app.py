@@ -49,7 +49,7 @@ def llm_responser(url=llm_server_url, prompt_text=""):
     return return_message
 
 def show_loading_animation(user_id, loadingSeconds=5):
-    line_bot_show_loading_animation = "https://api.line.me/v2/bot/chat/loading/start"
+    url = "https://api.line.me/v2/bot/chat/loading/start"
 #    channel_access_token = os.getenv('CHANNEL_ACCESS_TOKEN')
     channel_secret = os.getenv('CHANNEL_SECRET')
     
@@ -61,7 +61,8 @@ def show_loading_animation(user_id, loadingSeconds=5):
         "chatId": user_id,
         "loadingSeconds": loadingSeconds
     }
-    response = requests.post(line_bot_show_loading_animation, headers=headers, json=data)
+    response = requests.post(url, headers=headers, json=data)
+    return response
 
 @app.route("/callback", methods=['POST'])
 def callback():
