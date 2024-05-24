@@ -66,11 +66,11 @@ def handle_message(event):
         api_instance.show_loading_animation_with_http_info(
             ShowLoadingAnimationRequest(chatId=event.source.user_id, 
                                         loadingSeconds=5)) # ShowLoadingAnimationRequest
-    prompt = event.message.text
-    llm_text = llm_responser(llm_server_url, prompt)
-    message = TextSendMessage(text=llm_text)
-    line_bot_api.reply_message(event.reply_token, message)
-#        api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
+        prompt = event.message.text
+        llm_text = llm_responser(llm_server_url, prompt)
+        message = TextSendMessage(text=llm_text)
+#        line_bot_api.reply_message(event.reply_token, message)
+        api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
 
 # 以下程式碼是要給 Render.com 用來自動觸發測試 Webhook，以便持續動作不停機。
 @app.route("/healthz", methods=['GET'])
