@@ -48,22 +48,6 @@ def llm_responser(url=llm_server_url, prompt_text=""):
         retern_message = f"Error:{response.status_code} {response.text}"
     return return_message
 
-def show_loading_animation(user_id, loadingSeconds=5):
-    url = "https://api.line.me/v2/bot/chat/loading/start"
-#    channel_access_token = os.getenv('CHANNEL_ACCESS_TOKEN')
-    channel_secret = os.getenv('CHANNEL_SECRET')
-    
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {channel_secret}'
-    }
-    data = {
-        "chatId": user_id,
-        "loadingSeconds": loadingSeconds
-    }
-    response = requests.post(url, headers=headers, json=data)
-    return response
-
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
@@ -77,18 +61,16 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    response = show_loading_animation(event.source.user_id, 5)
+    with ApiClient(configuration) as api_client:
+        api_instance = MessagingApi(api_client)
+        api_instance.show_loading_animation_with_http_info(
+            ShowLoadingAnimationRequest(chatId=event.source.user_id, 
+                                        loadingSeconds=5)) # ShowLoadingAnimationRequest
     prompt = event.message.text
     llm_text = llm_responser(llm_server_url, prompt)
-    with ApiClient(configuration) as api_client:
-#        api_instance = MessagingApi(api_client)
-#        api_instance.show_loading_animation_with_http_info(
-#            ShowLoadingAnimationRequest(chatId=event.source.user_id, 
-#                                        loadingSeconds=5)) # ShowLoadingAnimationRequest
-        message = TextSendMessage(text=llm_text)
-        line_bot_api.reply_message(event.reply_token, message)
+    message = TextSendMessage(text=llm_text)
+    line_bot_api.reply_message(event.reply_token, message)
 #        api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
-    return response
 
 # 以下程式碼是要給 Render.com 用來自動觸發測試 Webhook，以便持續動作不停機。
 @app.route("/healthz", methods=['GET'])
