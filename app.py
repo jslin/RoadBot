@@ -24,7 +24,7 @@ def llm_responser(url=llm_server_url, prompt_text=""):
     "Content-Type": "application/json"
     }
     data = {
-        "model": "gemma:7b",
+        "model": "yi:v1.5",
         "prompt": prompt_text,
     #    "format": "json",
         "options": {
