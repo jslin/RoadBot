@@ -69,8 +69,8 @@ def handle_message(event):
         prompt = event.message.text
         llm_text = llm_responser(llm_server_url, prompt) # 呼叫大模型
         message = TextSendMessage(text=llm_text) # 將大模型的回應轉成 LINE 訊息格式
-#        line_bot_api.reply_message(event.reply_token, message)
-        api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
+        line_bot_api.reply_message(event.reply_token, message)
+#        api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
 
 # 以下程式碼是要給 Render.com 用來自動觸發測試 Webhook，以便持續動作不停機。
 @app.route("/healthz", methods=['GET'])
