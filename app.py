@@ -72,7 +72,8 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token, message)
 #        api_instance.reply_message(ReplyMessageRequest(replyToken=event.reply_token, messages=message))
 
-# 以下程式碼是要給 Render.com 用來自動觸發測試 Webhook，以便持續動作不停機。
+# 以下程式碼是要給 Render.com 用來自動觸發測試程式是否活著用的，
+# 另要需要搭配 uptime.com 的監控服務，以便 webhook 持續動作不停機。
 @app.route("/healthz", methods=['GET'])
 def healthz():
     app.logger.info("Health trigger")
