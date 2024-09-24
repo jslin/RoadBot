@@ -18,9 +18,9 @@ configuration = Configuration(access_token=os.environ['CHANNEL_ACCESS_TOKEN'])
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 llm_server_url = os.environ['REMOTE_LLM_SERVER']
-model_name = "gemma:7b"
+model_name = "gemma2:7b"
 
-def llm_responser(url=llm_server_url, model_name="gemma:7b", prompt_text=""):
+def llm_responser(url=llm_server_url, model_name="gemma2:9b", prompt_text=""):
     headers = {
     "Content-Type": "application/json"
     }
@@ -67,9 +67,11 @@ def handle_message(event):
     if user_message[:5] == "/help":
         help_message = f'切換模型的指令：\n\n/model 模型名稱\n\n\
             支援的模型名稱\n\nGemma 7B: gemma:7b\n\
+            Gemma2 9B: gemma2:9b\n\
             零一萬物: yi:v1.5\n\
             Mistral 7B: mistral:7b\n\
             Aya-23 8B: aya:8b\n\n\
+            通義千問2.5: qwen2.5:72b\n\n\
             目前的模型:{model_name}'
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=help_message)) # 送出回應訊息
     else:
