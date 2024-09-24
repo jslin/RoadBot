@@ -18,7 +18,7 @@ configuration = Configuration(access_token=os.environ['CHANNEL_ACCESS_TOKEN'])
 line_bot_api = LineBotApi(os.environ['CHANNEL_ACCESS_TOKEN'])
 handler = WebhookHandler(os.environ['CHANNEL_SECRET'])
 llm_server_url = os.environ['REMOTE_LLM_SERVER']
-model_name = "gemma2:7b"
+model_name = "gemma2:9b"
 
 def llm_responser(url=llm_server_url, model_name="gemma2:9b", prompt_text=""):
     headers = {
