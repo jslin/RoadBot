@@ -65,16 +65,16 @@ def handle_message(event):
     user_message = event.message.text
     global model_name
     if user_message[:5] == "/help":
-        help_message = f'切換模型的指令：\n\n/model 模型名稱\n\n\
-            支援的模型名稱\n\nsmollm2:135m: smollm2:135m\n\
-            smollm2:360m: smollm2:360m\n\
-            smollm2:1.7b: smollm2:1.7b\n\
-            Gemma2 9B: gemma2:9b\n\
-            Gemma2 2b: gemma2:2b\n\
-            llama3.2-vision:11b: llama3.2-vision:11b\n\
-            llama3.2:3b: llama3.2:3b\n\
-            llama3.2:1b: llama3.2:1b\n\n\   
-            目前的模型:{model_name}'
+        help_message = f'''切換模型的指令：\n\n/model 模型名稱\n\n\
+支援的模型名稱\n\nsmollm2:135m: smollm2:135m\n\
+smollm2:360m: smollm2:360m\n\
+smollm2:1.7b: smollm2:1.7b\n\
+Gemma2 9B: gemma2:9b\n\
+Gemma2 2b: gemma2:2b\n\
+llama3.2-vision:11b: llama3.2-vision:11b\n\
+llama3.2:3b: llama3.2:3b\n\
+llama3.2:1b: llama3.2:1b\n\n\   
+目前的模型:{model_name}'''
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=help_message)) # 送出回應訊息
     else:
         if user_message[:6] == "/model":
