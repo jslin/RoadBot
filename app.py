@@ -73,7 +73,7 @@ def handle_message(event):
             Gemma2 2b: gemma2:2b\n\
             llama3.2-vision:11b: llama3.2-vision:11b\n\
             llama3.2:3b: llama3.2:3b\n\
-            llama3.2:1b: llama3.2:1b\n\n\      
+            llama3.2:1b: llama3.2:1b\n\n\   
             目前的模型:{model_name}'
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text=help_message)) # 送出回應訊息
     else:
